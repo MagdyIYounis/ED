@@ -1,0 +1,210 @@
+<!--
+ Copyright (c) 2014, 2020, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+<div class="oj-hybrid-padding">
+  <div id="overlayMessages">
+    <oj-messages
+      messages="{{messagesDataprovider}}"
+      position="{}"
+      display="notification"
+    >
+    </oj-messages>
+  </div>
+  <h1>Add New Client</h1>
+  <oj-form-layout
+    label-edge="{{labelEdge}}"
+    max-columns="{{columns}}"
+    direction="row"
+  >
+    <oj-input-text
+      label-hint="Code Client"
+      disabled="true"
+      value="{{Code_Client}}"
+    ></oj-input-text>
+    <oj-input-text
+      id="NameClient"
+      label-hint="Name Client"
+      required="true"
+      validators="[[valid_Name]]"
+      disabled="false"
+      autocomplete="off"
+      value="{{Name_Client}}"
+    ></oj-input-text>
+    <oj-input-text
+      id="NameOfOwner"
+      label-hint="Name Of Owner"
+      required="true"
+      disabled="false"
+      validators="[[valid_Name]]"
+      autocomplete="off"
+      value="{{Name_Of_Owner}}"
+    ></oj-input-text>
+    <oj-text-area
+      id="info"
+      label-hint="Info"
+      rows="2"
+      autocomplete="off"
+      value="{{Info}}"
+    >
+    </oj-text-area>
+    <oj-combobox-one
+      id="Governorate"
+      label-hint="Governorate"
+      value="{{val_Country}}"
+      required="true"
+      options="{{Country_Op}}"
+      on-value-changed="[[valueChangeCountry]]"
+      style="max-width: 18.1em;"
+    >
+    </oj-combobox-one>
+
+    <oj-select-many
+      id="City"
+      label-hint="City"
+      value="{{val_City}}"
+      style="max-width: 18.1em;"
+      options="{{City_Op}}"
+      required="true"
+    >
+    </oj-select-many>
+
+    <oj-select-many
+      id="TypeOfShop"
+      label-hint="Type Shop"
+      value="{{val_Type}}"
+      style="max-width: 18.1em; max-height: 10px;"
+      options="{{Type_Op}}"
+      required="true"
+    >
+    </oj-select-many>
+    <oj-label for="Phone">Add Number Phone</oj-label>
+    <oj-combobox-many
+      id="Phone"
+      on-value-changed="[[valueChangeHandler]]"
+      value="{{Phone}}"
+      messages-custom="{{error_Phone}}"
+      style="max-width: 20em;"
+      required="true"
+    ></oj-combobox-many>
+    <div class="oj-flex-bar">
+      <oj-button
+        id="Save"
+        disabled="{{Disable}}"
+        chroming="callToAction"
+        on-oj-action="[[Save]]"
+        class="but-Style oj-button-primary"
+      >
+        <span><oj-bind-text value="[[button2Text]]"></oj-bind-text></span>
+      </oj-button>
+
+      <oj-button
+        id="Search"
+        chroming="callToAction"
+        on-oj-action="[[openListener]]"
+        class="but-Style oj-button-primary"
+      >
+        Search
+      </oj-button>
+      <oj-button
+        id="Reset"
+        chroming="callToAction"
+        class="but-Style oj-button-primary"
+        on-oj-action="[[clear]]"
+      >
+        Reset
+      </oj-button>
+    </div>
+  </oj-form-layout>
+  <oj-table
+    id="ClientTable"
+    aria-label="Client Table"
+    data="[[dataprovider]]"
+    columns-default='{"sortable": "enabled"}'
+    selection-mode.row="single"
+    first-selected-row="{{selectedRows}}"
+    on-first-selected-row-changed="[[selectedListener]]"
+    scroll-policy="loadMoreOnScroll"
+    scroll-policy-options='{"fetchSize": 10}'
+    columns='[{"headerText": "Client ID", 
+            "field": "Code_Client",
+            "headerClassName": "oj-sm-only-hide",
+            "className": "oj-sm-only-hide",
+            "resizable": "enabled"},
+          {"headerText": "Client Name", 
+            "field": "Name_client",
+            "resizable": "enabled"},
+          {"headerText": "Name Of owner", 
+            "field": "Name_Of_owner",
+            "headerClassName": "oj-sm-only-hide",
+            "className": "oj-sm-only-hide",
+            "resizable": "enabled"},
+          {"headerText": "Info", 
+            "field": "Info",
+            "resizable": "enabled"},
+            {"headerText": "Point", 
+            "field": "Rate",
+            "resizable": "enabled",
+            "template": "ratingCellTemplate"},
+            {"headerText": "Date", 
+              "field": "Date",
+              "resizable": "enabled"},
+              {"headerText": "Cities", 
+                "field": "Cities",
+                "resizable": "enabled"},
+                {"headerText": "Types", 
+                  "field": "Types",
+                  "resizable": "enabled"}]'
+    style="width: 100%; height: 400px;"
+  >
+    <template slot="ratingCellTemplate" data-oj-as="cell">
+      <oj-rating-gauge
+        value="[[cell.data]]"
+        readonly
+        style="width: 60px; height: 15px;"
+      >
+      </oj-rating-gauge>
+    </template>
+  </oj-table>
+  <oj-popup
+    id="popup1"
+    class="demo-popup"
+    tail="none"
+    position.my.horizontal="center"
+    position.my.vertical="center"
+    position.at.horizontal="center"
+    position.at.vertical="center"
+    position.of="window"
+    position.offset.y="-10"
+    modality="modal"
+    on-oj-animate-start="[[startAnimationListener]]"
+  >
+    <div class="demo-popup-body">
+      <div class="demo-popup-header"><h5>Search Customer</h5></div>
+      <div class="demo-popup-content">
+        <oj-label for="CodeCustomerSearch">Code Customer</oj-label>
+        <oj-input-text
+          id="CodeCustomerSearch"
+          label-hint="Code Customer"
+          value="{{Code_Client_Search}}"
+        ></oj-input-text>
+        <oj-label for="Phone_Search">Phone Number</oj-label>
+        <oj-input-text
+          id="Phone_Search"
+          label-hint="Phone"
+          value="{{Phone_Search}}"
+        ></oj-input-text>
+        <br />
+        <br />
+      </div>
+      <div class="demo-popup-footer">
+        <oj-button id="btnCancel" on-oj-action="[[cancelListener]]">
+          Search
+        </oj-button>
+        <oj-button id="btnCancel" on-oj-action="[[cancelListener_1]]">
+          Cencel
+        </oj-button>
+      </div>
+    </div>
+  </oj-popup>
+</div>
